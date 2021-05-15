@@ -69,16 +69,12 @@ function passSelection(buttonSelection) {
             operate(operation, firstValue, secondValue);
             buttonSelection = '';
             displayValue = '';
-        } else {
-
-        }
+        } 
      
     //displays the value of the selection
     displayValue = displayValue + buttonSelection;
     displayContent(displayValue);
     console.log(displayValue);
-   
-
     
 }
 
