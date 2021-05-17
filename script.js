@@ -108,11 +108,11 @@ function passSelection(buttonSelection) {
         currentValue = myValue.join('');
         displayContent(currentValue);
     } else if (buttonSelection === '√') {
-        if (answer !== undefined) {
-            operate('√', answer);
-        } else {
+        if (currentValue !== "" && currentValue !== undefined && answer !== "") {
             operate('√', currentValue);
-        } 
+        } else  {
+            operate('√', answer);
+        }
     } else if (buttonSelection === 'unary') {
         convertToString();
         addRemoveUnary(passValue);
@@ -151,7 +151,6 @@ function clearPassValues() {
 }
 
 
-
 // obtains operator and numbers and decide what function operation to call
 // stores new value to answer and display the content
 function operate(operator, a, b){
@@ -171,26 +170,43 @@ function operate(operator, a, b){
             break;
         case '√':
             answer = squareRoot(a);
+            console.log(`${operator} ${a}`)
             break;
         default:
             answer = "Syntax Error";
             
     } 
     checkDecimalPlaces(answer);
-    displayContent(answer);
     firstValue = '';
     secondValue = '';
     operation = '';
+    myValue = '';
+    console.log(`Step 7 ${answer}`);
+    displayContent(answer);
     console.log(`%cThe answer ${answer}`, `background: tomato`);
     return answer;
 }
 
-function checkDecimalPlaces(answer) {
-
+function checkDecimalPlaces() {
+    answer = answer.toString();
+    console.log(`Step 1 ${answer}`);
+    let myValue = answer.split('');
+    console.log(`Step 2 ${myValue}`);
+    if (myValue.length >= 12) {
+        answer = Number(answer);
+        console.log(`Step 3 ${answer}`);
+        answer = answer.toFixed(4);
+        answer = Number(answer);
+        console.log(`Step 4 ${answer}`);
+    } else {
+        console.log(`Step 5 ${answer}`);
+        answer = Number(answer);
+    }
+    console.log(`Step 6 ${answer}`);
     return answer;
 }
 
-
+console.log(`Step 8 ${answer}`);
 // do calculations for each operation
 function sum(a, b) {
     return a + b;
