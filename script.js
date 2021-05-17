@@ -15,34 +15,45 @@ function changeColor(e) {
     //console.log(buttonSelection);
 }
 
+window.addEventListener('keydown', keySupport);
+
+//keyboard: -: unary; W: √; space: AC; enter: =
+//keyboard: ]: /; x; -; +; .; backspace: clear
+function keySupport(e){
+    let pressed = e.keyCode;
+    let keyCodes = {
+        48: "0", 49: "1", 50: "2", 51: "3", 52: "4", 53: "5",
+        54: "6", 55: "7", 56: "8", 57: "9", 
+        80: "unary", 87: "√", 32: "AC", 221: "/",
+        88: "x", 173: "-", 61: "+",
+        190: ".", 8: "clear", 13: "=",
+    }
+    passSelection(keyCodes[pressed]);
+} 
+
 let currentValue = ''; //stores the current value handled
 let firstValue = '';
 let secondValue = '';
 let operation = '';
 let operator;
 let answer;
-
+let myValue;
+let passValue;
 
 //obtains the selection value of the buttons upon click and decide what to do with the selection
 function passSelection(buttonSelection) {  
     let digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    let operations = ['+', '-', '/', 'x', '√'];
+    let operations = ['+', '-', '/', 'x'];
     let equals = '=';
-
-    
     
 
     if (digits.includes(buttonSelection)) {     // user input is a number
         currentValue += buttonSelection;
         displayContent(currentValue);
-
         if (firstValue === answer && operator !== "" && secondValue !== "") {                //SCENARIO 1 2nd step, storing the secondValue (first value from result of first equation)
             secondValue = Number(currentValue);
         } 
-
-
     } else if (operations.includes(buttonSelection)) {    // user input is an operation
-        
         if (firstValue === "" && answer === undefined) {   // SCENARIO 2 gets the currentValue and store it as first value if no firstValue available
             firstValue = Number(currentValue);
             operator = buttonSelection;
@@ -70,14 +81,13 @@ function passSelection(buttonSelection) {
             currentValue = "";
             console.log("'m here 5");
         }
-      
     } else if (equals.includes(buttonSelection)) {   // user input is equal sign
         secondValue = Number(currentValue);                 //SCENARIO 2
         operate(operator, firstValue, secondValue);
         currentValue = '';
         firstValue = '';
         secondValue = '';
-    } else if (buttonSelection === 'clear') {
+    } else if (buttonSelection === 'AC') {
         firstValue = '';
         secondValue = '';
         operator = '';
@@ -85,18 +95,59 @@ function passSelection(buttonSelection) {
         answer = '';
         displayContent(currentValue);
     } else if (buttonSelection === '.') {
-        currentValue += buttonSelection;
+        if (currentValue.includes('.')) {
+            currentValue = currentValue;
+            buttonSelection = "";
+        } else {
+            currentValue += buttonSelection;
+        }
         displayContent(currentValue);
+    } else if (buttonSelection === 'clear') {
+        myValue = currentValue.split("")
+        myValue.pop();
+        currentValue = myValue.join('');
+        displayContent(currentValue);
+    } else if (buttonSelection === '√') {
+        if (answer !== undefined) {
+            operate('√', answer);
+        } else {
+            operate('√', currentValue);
+        } 
+    } else if (buttonSelection === 'unary') {
+        convertToString();
+        addRemoveUnary(passValue);
+        currentValue = myValue.join('');
+        displayContent(currentValue);
+        clearPassValues();
     }
-
-
     console.log(`%cfirst value is ${firstValue}`, 'background: red');
     console.log(`operator is ${operator}`);
     console.log(`second value is ${secondValue}`);
     console.log(`answer is ${answer}`);
     console.log(`current value is ${currentValue}`);
-   
+}
 
+function convertToString() {
+    if (answer !== "" && currentValue === "") {
+        passValue = answer.toString();
+    } else {
+        passValue = currentValue;
+    } 
+}
+
+function addRemoveUnary() {
+    myValue = passValue.split('');
+    if (myValue.includes('-')) {
+        myValue.shift('');
+    } else {
+        myValue.unshift('-');
+    }
+    return myValue
+}
+
+function clearPassValues() {
+    myValue = "";
+    passValue = "";
 }
 
 
@@ -125,14 +176,18 @@ function operate(operator, a, b){
             answer = "Syntax Error";
             
     } 
-
-    displayCurrent.textContent = `${answer}`;
+    checkDecimalPlaces(answer);
+    displayContent(answer);
     firstValue = '';
     secondValue = '';
     operation = '';
     console.log(`%cThe answer ${answer}`, `background: tomato`);
     return answer;
-    
+}
+
+function checkDecimalPlaces(answer) {
+
+    return answer;
 }
 
 
