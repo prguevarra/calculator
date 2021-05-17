@@ -1,6 +1,7 @@
 //add query selectors to the html ids and classes
 let buttons = document.querySelectorAll('button');
 let displayCurrent = document.querySelector('#display-2');
+let displayEquation = document.querySelector('#display-1');
 
 // add event listeners for each button
 buttons.forEach((button) => {
@@ -12,6 +13,7 @@ function changeColor(e) {
     e.target.style['backgroundColor'] = 'white';
     let buttonSelection = e.target.getAttribute('id');
     passSelection(buttonSelection); 
+    displayTheEquation(buttonSelection)
     //console.log(buttonSelection);
 }
 
@@ -29,6 +31,7 @@ function keySupport(e){
         190: ".", 8: "clear", 13: "=",
     }
     passSelection(keyCodes[pressed]);
+    displayTheEquation(keyCodes[pressed])
 } 
 
 let currentValue = ''; //stores the current value handled
@@ -39,6 +42,12 @@ let operator;
 let answer;
 let myValue;
 let passValue;
+let equationDisplayed;
+
+function displayTheEquation(selected) {
+    equationDisplayed += selected; 
+    displayMyEquationToCalc(equationDisplayed);
+}
 
 //obtains the selection value of the buttons upon click and decide what to do with the selection
 function passSelection(buttonSelection) {  
@@ -48,11 +57,15 @@ function passSelection(buttonSelection) {
     
 
     if (digits.includes(buttonSelection)) {     // user input is a number
-        currentValue += buttonSelection;
+        if (currentValue.length > 12) {
+            currentValue = currentValue;
+        } else {
+            currentValue += buttonSelection;
+        }
         displayContent(currentValue);
         if (firstValue === answer && operator !== "" && secondValue !== "") {                //SCENARIO 1 2nd step, storing the secondValue (first value from result of first equation)
             secondValue = Number(currentValue);
-        } 
+        }
     } else if (operations.includes(buttonSelection)) {    // user input is an operation
         if (firstValue === "" && answer === undefined) {   // SCENARIO 2 gets the currentValue and store it as first value if no firstValue available
             firstValue = Number(currentValue);
@@ -113,6 +126,7 @@ function passSelection(buttonSelection) {
         } else  {
             operate('√', answer);
         }
+        currentValue = '';
     } else if (buttonSelection === 'unary') {
         convertToString();
         addRemoveUnary(passValue);
@@ -236,6 +250,9 @@ function displayContent(value) {
    displayCurrent.textContent = `${value}`;
 }
 
+function displayMyEquationToCalc(value) {
+    displayEquation.textContent = `${value}`;
+ }
 
 
 // This function is working for consecutive operations with multiple and single operands
