@@ -18,6 +18,7 @@ function changeColor(e) {
     //console.log(buttonSelection);
 }
 
+//add event listener for keyboard support
 window.addEventListener('keydown', keySupport);
 
 //keyboard: -: unary; W: √; space: AC; enter: =
@@ -46,7 +47,6 @@ let myValue;
 let passValue;
 let equationDisplayed = "";
 let equation = "";
-
 let digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 let operations = ['+', '-', '/', 'x'];
 let equals = '=';
@@ -54,21 +54,6 @@ let equals = '=';
 // function for display 1 (top of screen)
 function passEquation(buttonSelection) {
 
-    // if (firstValue !== undefined && firstValue !== "") {
-    //     equation = `${equation + firstValue} `;
-    // } else if (secondValue !== undefined && secondValue !== "") {
-    //     equation = equation + secondValue;
-    // } else if (buttonSelection === "x") {
-    //     displayTheEquation(equation + buttonSelection);
-    //     console.log(`button selected is ${buttonSelection}`)
-    // } else if (buttonSelection === "√") {
-    //     if (answer !== "" || answer !== undefined) {
-    //         equation = `√ ${answer}`
-    //     } else if (firstValue !== "" || firstValue !== undefined)
-    //         equation = `√ ${firstValue}`
-    // } else if (buttonSelection === "AC" || buttonSelection === "=") {
-    //     
-    // }
     if (equation === "√") {
         equation = "";
     }
@@ -112,28 +97,23 @@ function passSelection(buttonSelection) {
             firstValue = Number(currentValue);
             operator = buttonSelection;
             currentValue = '';
-          //  console.log("I'm here 1");
         } else if (firstValue !== "" && operator !== "") {  // SCENARIO 1 if you have first Variable, operator and current value and you click an operator
             secondValue = Number(currentValue);
             operate(operator, firstValue, secondValue);
             firstValue = answer;
             operator = buttonSelection;
             currentValue = '';
-           // console.log("I'm here 2");
         } else if (firstValue === "" && operator === "" && secondValue === "" && answer === "") { // after clear or after refresh store variable
             firstValue = Number(currentValue);
             operator = buttonSelection;
             currentValue = '';
-           // console.log("I'm here 3");
         } else if (currentValue === "" && firstValue === "" && operator !== "" && secondValue === "" && answer !== "") { //SCENARIO 3 having another operation from recently computed expression
             firstValue = Number(answer);
             operator = buttonSelection;
-           // console.log("I'm here 4");
         } else if (currentValue !== "" && firstValue !== answer && firstValue === "" & answer !== "" & operator !== "" && secondValue === "") { //for obtaining a new input value from user after evaluating an expresion, store this current number in firstVariable
             operator = buttonSelection;
             firstValue = Number(currentValue);
             currentValue = "";
-           // console.log("'m here 5");
         }
     } else if (equals.includes(buttonSelection)) {   // user input is equal sign
         secondValue = Number(currentValue);                 //SCENARIO 2
@@ -207,8 +187,6 @@ function clearPassValues() {
     passValue = "";
 }
 
-
-
 // obtains operator and numbers and decide what function operation to call
 // stores new value to answer and display the content
 function operate(operator, a, b){
@@ -246,25 +224,14 @@ function operate(operator, a, b){
 
 function checkDecimalPlaces() {
     answer = answer.toString();
-   // console.log(`Step 1 ${answer}`);
     let myValue = answer.split('');
-   // console.log(`Step 2 ${myValue}`);
     if (myValue.length >= 13) {
-        // if (myValue.includes('.')) {
-        //     answer = Number(answer);
-        //     answer = answer.toFixed(4);
-        //     answer = Number(answer);
-        // } else {
             console.log(`My value length ${myValue.length}`);
             answer = Number(answer);
             answer = answer.toExponential(4);
-           // answer = Number(answer);
-        // }
     } else {
-    //    console.log(`Step 5 ${answer}`);
         answer = Number(answer);
     }
-  //  console.log(`Step 6 ${answer}`);
     return answer;
 }
 
