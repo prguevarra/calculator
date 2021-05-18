@@ -3,6 +3,7 @@ let buttons = document.querySelectorAll('button');
 let displayCurrent = document.querySelector('#display-2');
 let displayEquation = document.querySelector('#display-1');
 
+
 // add event listeners for each button
 buttons.forEach((button) => {
     button.addEventListener('click', changeColor);
@@ -10,10 +11,9 @@ buttons.forEach((button) => {
 
 //changes color for each click and pass the clicked value to passSelection function
 function changeColor(e) {
-    e.target.style['backgroundColor'] = 'white';
+    // e.target.style['backgroundColor'] = 'white';
     let buttonSelection = e.target.getAttribute('id');
     passSelection(buttonSelection); 
-    displayTheEquation(buttonSelection)
     //console.log(buttonSelection);
 }
 
@@ -26,12 +26,12 @@ function keySupport(e){
     let keyCodes = {
         48: "0", 49: "1", 50: "2", 51: "3", 52: "4", 53: "5",
         54: "6", 55: "7", 56: "8", 57: "9", 
-        80: "unary", 87: "√", 32: "AC", 221: "/",
+        80: "unary", 87: "√", 32: "AC", 220: "/",
         88: "x", 173: "-", 61: "+",
         190: ".", 8: "clear", 13: "=",
     }
     passSelection(keyCodes[pressed]);
-    displayTheEquation(keyCodes[pressed])
+    
 } 
 
 let currentValue = ''; //stores the current value handled
@@ -42,12 +42,9 @@ let operator;
 let answer;
 let myValue;
 let passValue;
-let equationDisplayed;
+let equationDisplayed = "";
 
-function displayTheEquation(selected) {
-    equationDisplayed += selected; 
-    displayMyEquationToCalc(equationDisplayed);
-}
+
 
 //obtains the selection value of the buttons upon click and decide what to do with the selection
 function passSelection(buttonSelection) {  
@@ -250,137 +247,3 @@ function displayContent(value) {
    displayCurrent.textContent = `${value}`;
 }
 
-function displayMyEquationToCalc(value) {
-    displayEquation.textContent = `${value}`;
- }
-
-
-// This function is working for consecutive operations with multiple and single operands
-// Cannot store value of the answer from previous operation after clicking "="
-
-
-//function passSelection(buttonSelection) {
-    
-  
-//     let digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-//     let operations = ['+', '-', '/', 'x'];
-//     let equals = '=';
-
-//         if (digits.includes(buttonSelection)){
-//             if(firstValue === answer) {
-//                 secondValue = Number(displayValue);
-//                 console.log (`%cfirst value ${firstValue}`, `background: pink`);
-//                 console.log (`%coperator ${operation}`, `background: pink`);
-//                 console.log (`%csecond ${secondValue}`, `background: pink`);
-//             }
-//         } else if (operations.includes(buttonSelection)) {
-//             if (firstValue === '') {        //very first round, empty value from beginning
-//                 console.log (`%cfirst value ${firstValue}`, `background: red`);
-//                 console.log (`%coperator ${operation}`, `background: red`);
-//                 console.log (`%csecond ${secondValue}`, `background: red`);
-//                 firstValue = Number(displayValue);
-//                 operation = buttonSelection;
-//                 buttonSelection = '';
-//                 displayValue = '';
-//             } else {
-//                 if (answer !== '') {
-//                     secondValue = Number(displayValue);
-//                     operate(operation, firstValue, secondValue);
-//                     firstValue = answer;
-//                     operation = buttonSelection;
-//                     displayValue = '';
-//                     buttonSelection = '';
-//                     console.log (`%cfirst value ${firstValue}`, `background: blue`);
-//                     console.log (`%coperator ${operation}`, `background: blue`);
-//                     console.log (`%csecond ${secondValue}`, `background: blue`);
-//                 } else {
-//                     secondValue = Number(displayValue);
-//                     displayValue = '';
-//                     operation = buttonSelection;
-//                     console.log (`%cfirst value ${firstValue}`, `background: yellow`);
-//                     console.log (`%coperator ${operation}`, `background: yellow`);
-//                     console.log (`%csecond ${secondValue}`, `background: yellow`);
-//                 }
-
-//             }
-//         } else if (equals.includes(buttonSelection)) {
-//             secondValue = Number(displayValue);
-//             operate(operation, firstValue, secondValue);
-//             buttonSelection = '';
-//             displayValue = '';
-//             displayContent(answer);
-//         } 
-     
-//     //displays the value of the selection
-//     displayValue = displayValue + buttonSelection;
-//     displayContent(displayValue);
-    
-//     console.log(displayValue);
-//     console.log(answer);
-//     console.log (`%cfirst value ${firstValue}`, `background: black; color: white`);
-//     console.log (`%coperator ${operation}`, `background: black; color: white`);
-//     console.log (`%csecond ${secondValue}`, `background: black; color: white`);
-//     console.log (`%canswer ${answer}`, `background: black; color: white`);
-//     console.log (`%cpreviousAnswer ${previousAnswer}`, `background: black; color: white`);
-// }
-
-
-
-
-
-//______________________________________________
-
-// this function is only working with scenario 3 (can store value of previous operations and use it to next equations)
-
-// if (digits.includes(buttonSelection)) {     // user input is a number
-        
-//     currentValue += buttonSelection; 
-//     displayContent(currentValue);
-//    // console.log('im 0');  // DOOOOOONE
-//     if (firstValue !== "") {
-//             secondValue = Number(currentValue); 
-//    //         console.log('im 1');
-//     } else if (answer !== "") {
-//             firstValue = currentValue;
-//    //         console.log('im 1.1');   // DOOOOOONE
-//     } 
-
-// } else if (operations.includes(buttonSelection)) {    // user input is an operation
-    
-//     if (answer !== undefined) { 
-//         firstValue = Number(answer);
-//         operator = buttonSelection;
-//         console.log('im 2');
-//         console.log(`Answer contains ${answer}`)
-
-//     } else if (firstValue !== '') { //current value is stored in operation variable
-//         firstValue = Number(currentValue); 
-//         secondValue = '';
-//         operator = buttonSelection;
-//         console.log('im 3');  // DOOOOOONE
-//     } else if (firstValue && secondValue && operation && answer === undefined) {  //is not empty then, evaluates the expression
-//             operate(operation, firstValue, secondValue);       
-//             console.log('im 4');        
-//     } 
-//     currentValue = '';
-
-//     console.log(`first value is ${firstValue}`);
-//     console.log(`operator is ${operator}`);
-//     console.log(`second value is ${secondValue}`);
-//     console.log(`current value is ${currentValue}`);
-
-// } else if (equals.includes(buttonSelection)) {   // user input is equal sign
-//     console.log('im in operations button');
-//    operate(operator, firstValue, secondValue); 
-//    currentValue = '';
-//    displayContent(answer);
-//    firstValue = '';
-//    secondValue = '';
-//    operator = '';
-
-
-//    console.log(`first value is ${firstValue}`);
-//    console.log(`operator is ${operator}`);
-//    console.log(`second value is ${secondValue}`);
-//    console.log(`current value is ${currentValue}`);
-// }
