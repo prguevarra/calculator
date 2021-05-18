@@ -52,18 +52,21 @@ main {
     color: var(--cool-gray);
 }
 
-/* #display-1 {
-    border: 2px solid;
+#display-1 {
+    /* border: 2px solid; */
+    padding-top: 5px;
     border-bottom: var(--gray-border);
-    height: 60px;
+    padding-right: 10px;
+    height: 23px;
     align-content: center;
-} */
+}
 
 #display-2 {
-   /* border: 2px solid; */
+    /* border: 2px solid; */
     font-size: 40px;
     padding-right: 10px;
-    padding-top: 29px;
+    padding-top: 5px;
+
 }
 
 #buttons {
@@ -87,12 +90,6 @@ button {
 
 button:hover {
     opacity: 2;
-    /* color: var(--red-orange);
-    border: var(--slate) solid 2px;
-    background:#fff; */
-
-    /* box-shadow: 3px 3px 3px var(--gray);
-    box-sizing: border-box; */
 }
 
 .operation {
@@ -128,4 +125,40 @@ h1 {
 
 h4 {
     padding-left: 20px;
+}
+
+@media only screen and (max-width: 600px) {
+    main {
+        display: block;
+        text-align: center;
+        padding-left: 30px;
+    }
+    
+    #calculator-container {
+        margin-top: 20px;
+        width: 250px;
+        height: 350px;
+        grid-template-rows: 23%;
+    }
+    
+    #display-1 {
+        padding-top: 12px;
+        padding-right: 10px;
+        height: 23px;
+        font-size: 12px;
+    }
+    
+    #display-2 {
+        font-size: 23px;
+        padding-right: 10px;
+        padding-top: 8px;
+    }
+    
+    button {
+        font-size: 25px;
+    }
+    
+    #keyboard-support {
+        visibility: hidden;
+    }
 }

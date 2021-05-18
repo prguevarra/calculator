@@ -14,6 +14,7 @@ function changeColor(e) {
     // e.target.style['backgroundColor'] = 'white';
     let buttonSelection = e.target.getAttribute('id');
     passSelection(buttonSelection); 
+    passEquation(buttonSelection);
     //console.log(buttonSelection);
 }
 
@@ -31,6 +32,7 @@ function keySupport(e){
         190: ".", 8: "clear", 13: "=",
     }
     passSelection(keyCodes[pressed]);
+    passEquation(keyCodes[pressed]);
     
 } 
 
@@ -43,18 +45,60 @@ let answer;
 let myValue;
 let passValue;
 let equationDisplayed = "";
+let equation = "";
 
+let digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+let operations = ['+', '-', '/', 'x'];
+let equals = '=';
 
+// function for display 1 (top of screen)
+function passEquation(buttonSelection) {
+
+    // if (firstValue !== undefined && firstValue !== "") {
+    //     equation = `${equation + firstValue} `;
+    // } else if (secondValue !== undefined && secondValue !== "") {
+    //     equation = equation + secondValue;
+    // } else if (buttonSelection === "x") {
+    //     displayTheEquation(equation + buttonSelection);
+    //     console.log(`button selected is ${buttonSelection}`)
+    // } else if (buttonSelection === "√") {
+    //     if (answer !== "" || answer !== undefined) {
+    //         equation = `√ ${answer}`
+    //     } else if (firstValue !== "" || firstValue !== undefined)
+    //         equation = `√ ${firstValue}`
+    // } else if (buttonSelection === "AC" || buttonSelection === "=") {
+    //     
+    // }
+    if (equation === "√") {
+        equation = "";
+    }
+
+    if (equation.length > 30 || buttonSelection === "AC" || buttonSelection === "=") {
+        equation = "";
+    } else if (buttonSelection === "√") {
+        equation = `√`
+    } else if (buttonSelection === "clear") {
+        equation = currentValue;
+    } else if (buttonSelection === "unary" || buttonSelection === ".") {
+        equation = `${currentValue}`
+    } else if (operations.includes(buttonSelection) && answer !== "" && answer !== undefined) {
+        if (equation === "") {
+            equation += answer + buttonSelection + "";
+        } else {
+            equation += buttonSelection + "";
+        } 
+    } else {
+        equation = equation + "" + buttonSelection;  
+    }
+    displayTheEquation(equation);
+}
 
 //obtains the selection value of the buttons upon click and decide what to do with the selection
 function passSelection(buttonSelection) {  
-    let digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    let operations = ['+', '-', '/', 'x'];
-    let equals = '=';
     
 
     if (digits.includes(buttonSelection)) {     // user input is a number
-        if (currentValue.length > 12) {
+        if (currentValue.length > 11) {
             currentValue = currentValue;
         } else {
             currentValue += buttonSelection;
@@ -68,28 +112,28 @@ function passSelection(buttonSelection) {
             firstValue = Number(currentValue);
             operator = buttonSelection;
             currentValue = '';
-            console.log("I'm here 1");
+          //  console.log("I'm here 1");
         } else if (firstValue !== "" && operator !== "") {  // SCENARIO 1 if you have first Variable, operator and current value and you click an operator
             secondValue = Number(currentValue);
             operate(operator, firstValue, secondValue);
             firstValue = answer;
             operator = buttonSelection;
             currentValue = '';
-            console.log("I'm here 2");
+           // console.log("I'm here 2");
         } else if (firstValue === "" && operator === "" && secondValue === "" && answer === "") { // after clear or after refresh store variable
             firstValue = Number(currentValue);
             operator = buttonSelection;
             currentValue = '';
-            console.log("I'm here 3");
+           // console.log("I'm here 3");
         } else if (currentValue === "" && firstValue === "" && operator !== "" && secondValue === "" && answer !== "") { //SCENARIO 3 having another operation from recently computed expression
             firstValue = Number(answer);
             operator = buttonSelection;
-            console.log("I'm here 4");
+           // console.log("I'm here 4");
         } else if (currentValue !== "" && firstValue !== answer && firstValue === "" & answer !== "" & operator !== "" && secondValue === "") { //for obtaining a new input value from user after evaluating an expresion, store this current number in firstVariable
             operator = buttonSelection;
             firstValue = Number(currentValue);
             currentValue = "";
-            console.log("'m here 5");
+           // console.log("'m here 5");
         }
     } else if (equals.includes(buttonSelection)) {   // user input is equal sign
         secondValue = Number(currentValue);                 //SCENARIO 2
@@ -120,6 +164,8 @@ function passSelection(buttonSelection) {
     } else if (buttonSelection === '√') {
         if (currentValue !== "" && currentValue !== undefined && answer !== "") {
             operate('√', currentValue);
+        } else if (currentValue !== "" && answer === "") {
+            operate('√', currentValue);
         } else  {
             operate('√', answer);
         }
@@ -131,11 +177,11 @@ function passSelection(buttonSelection) {
         displayContent(currentValue);
         clearPassValues();
     }
-    console.log(`%cfirst value is ${firstValue}`, 'background: red');
+   console.log(`%cfirst value is ${firstValue}`, 'background: red');
     console.log(`operator is ${operator}`);
     console.log(`second value is ${secondValue}`);
     console.log(`answer is ${answer}`);
-    console.log(`current value is ${currentValue}`);
+   console.log(`current value is ${currentValue}`);
 }
 
 function convertToString() {
@@ -160,6 +206,7 @@ function clearPassValues() {
     myValue = "";
     passValue = "";
 }
+
 
 
 // obtains operator and numbers and decide what function operation to call
@@ -192,7 +239,6 @@ function operate(operator, a, b){
     secondValue = '';
     operation = '';
     myValue = '';
-    console.log(`Step 7 ${answer}`);
     displayContent(answer);
     console.log(`%cThe answer ${answer}`, `background: tomato`);
     return answer;
@@ -200,24 +246,28 @@ function operate(operator, a, b){
 
 function checkDecimalPlaces() {
     answer = answer.toString();
-    console.log(`Step 1 ${answer}`);
+   // console.log(`Step 1 ${answer}`);
     let myValue = answer.split('');
-    console.log(`Step 2 ${myValue}`);
-    if (myValue.length >= 12) {
-        answer = Number(answer);
-        console.log(`Step 3 ${answer}`);
-        answer = answer.toFixed(4);
-        answer = Number(answer);
-        console.log(`Step 4 ${answer}`);
+   // console.log(`Step 2 ${myValue}`);
+    if (myValue.length >= 13) {
+        // if (myValue.includes('.')) {
+        //     answer = Number(answer);
+        //     answer = answer.toFixed(4);
+        //     answer = Number(answer);
+        // } else {
+            console.log(`My value length ${myValue.length}`);
+            answer = Number(answer);
+            answer = answer.toExponential(4);
+           // answer = Number(answer);
+        // }
     } else {
-        console.log(`Step 5 ${answer}`);
+    //    console.log(`Step 5 ${answer}`);
         answer = Number(answer);
     }
-    console.log(`Step 6 ${answer}`);
+  //  console.log(`Step 6 ${answer}`);
     return answer;
 }
 
-console.log(`Step 8 ${answer}`);
 // do calculations for each operation
 function sum(a, b) {
     return a + b;
@@ -247,3 +297,6 @@ function displayContent(value) {
    displayCurrent.textContent = `${value}`;
 }
 
+function displayTheEquation(value) {
+    displayEquation.textContent = `${value}`;
+ }
