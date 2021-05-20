@@ -49,6 +49,7 @@ let equationDisplayed = "";
 let equation = "";
 let digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 let operations = ['+', '-', '/', 'x'];
+let allOperations = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '/', 'x', "clear", "unary", ".", `√`, "AC", "="];
 let equals = '=';
 
 // function for display 1 (top of screen)
@@ -72,6 +73,8 @@ function passEquation(buttonSelection) {
         } else {
             equation += buttonSelection + "";
         } 
+    } else if (buttonSelection !== allOperations.includes(allOperations)) {
+        equation = "";
     } else {
         equation = equation + "" + buttonSelection;  
     }
@@ -114,13 +117,25 @@ function passSelection(buttonSelection) {
             operator = buttonSelection;
             firstValue = Number(currentValue);
             currentValue = "";
+        } else if (firstValue !== '' && operator === '' && secondValue === '' && answer === '' && currentValue === '') {
+            operator = buttonSelection;
+            currentValue = '';
         }
     } else if (equals.includes(buttonSelection)) {   // user input is equal sign
         secondValue = Number(currentValue);                 //SCENARIO 2
-        operate(operator, firstValue, secondValue);
-        currentValue = '';
-        firstValue = '';
-        secondValue = '';
+        if ((firstValue === undefined || firstValue === "") && (operator === "" || operator === undefined)) {
+            displayContent(currentValue);
+            firstValue = Number(currentValue);
+            operator = '';
+            secondValue = '';
+            answer = '';
+            currentValue = '';
+        } else if (operator !== undefined || operator !== ""){
+            operate(operator, firstValue, secondValue);
+            currentValue = '';
+            firstValue = '';
+            secondValue = '';
+        } 
     } else if (buttonSelection === 'AC') {
         firstValue = '';
         secondValue = '';
@@ -228,7 +243,7 @@ function checkDecimalPlaces() {
     if (myValue.length >= 13) {
             console.log(`My value length ${myValue.length}`);
             answer = Number(answer);
-            answer = answer.toExponential(4);
+            answer = answer.toExponential(8);
     } else {
         answer = Number(answer);
     }
